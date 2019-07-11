@@ -12,10 +12,10 @@ title: |-
 summary: |
   Send a Chatwork message
 description: |
-  Send a Chatwork message from your bitrise build!
-website: https://github.com/monolithic-adam/bitrise-step-steps-chatwork-message
-source_code_url: https://github.com/monolithic-adam/bitrise-step-steps-chatwork-message
-support_url: https://github.com/monolithic-adam/bitrise-step-steps-chatwork-message/issues
+  Send a Chatwork message from your Bitrise build!
+website: https://github.com/monolithic-adam/bitrise-step-chatwork-message
+source_code_url: https://github.com/monolithic-adam/bitrise-step-chatwork-message
+support_url: https://github.com/monolithic-adam/bitrise-step-chatwork-message/issues
 host_os_tags:
   - osx-10.10
   - ubuntu-16.04
