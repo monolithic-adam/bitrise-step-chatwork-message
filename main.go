@@ -31,13 +31,16 @@ func validate(conf *Config) error {
 
 // postMessage sends a message to a channel.
 func postMessage(conf Config, msg string) error {
-	apiURL := fmt.Sprintf("https://api.chatwork.com/v2/rooms/%s/messages?body=%s", conf.RoomID.String(), msg)
+	client := &http.Client{}
+	apiURL := fmt.Sprintf("https://api.chatwork.com/v2/rooms/%s/messages?body=%s", string(conf.RoomID), msg)
 	data := url.Values{}
 	req, err := http.NewRequest("POST", apiURL, strings.NewReader(data.Encode()))
-	req.Header.Add("Content-Type", "application/json; charset=utf-8")
-	req.Header.Add("X-ChatWorkToken", conf.APIToken.String())
+	if err != nil {
+		return fmt.Errorf("failed to create request: %s", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+	req.Header.Set("X-ChatWorkToken", string(conf.APIToken))
 
-	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to send the request: %s", err)
@@ -56,9 +59,9 @@ func postMessage(conf Config, msg string) error {
 
 func createMessage() string {
 	if !success {
-		return "[info][title]Notification from Bitrise[/title](dance) Build Passed ✅ - ${BITRISE_APP_TITLE} (${BITRISE_GIT_BRANCH}) \nCommit message: ${BITRISE_GIT_MESSAGE} \nBuild logs: ${BITRISE_BUILD_URL}[/info]"
+		return "%5Binfo%5D%5Btitle%5DNotification%20from%20Bitrise%5B%2Ftitle%5D(dance)%20Build%20Passed%20%E2%9C%85%20-%20%24%7BBITRISE_APP_TITLE%7D%20(%24%7BBITRISE_GIT_BRANCH%7D)%20%5C%5CnCommit%20message%3A%20%24%7BBITRISE_GIT_MESSAGE%7D%20%5C%5CnBuild%20logs%3A%20%24%7BBITRISE_BUILD_URL%7D%5B%2Finfo%5D"
 	}
-	return "[info][title]Notification from Bitrise[/title];( Build Error 🚫 - ${BITRISE_APP_TITLE} (${BITRISE_GIT_BRANCH}) \nCommit message: ${BITRISE_GIT_MESSAGE} \nBuild logs: ${BITRISE_BUILD_URL}[/info]"
+	return "%5Binfo%5D%5Btitle%5DNotification%20from%20Bitrise%5B%2Ftitle%5D%3B(%20Build%20Error%20%F0%9F%9A%AB%20-%20%24%7BBITRISE_APP_TITLE%7D%20(%24%7BBITRISE_GIT_BRANCH%7D)%20%5C%5CnCommit%20message%3A%20%24%7BBITRISE_GIT_MESSAGE%7D%20%5C%5CnBuild%20logs%3A%20%24%7BBITRISE_BUILD_URL%7D%5B%2Finfo%5D"
 }
 
 func main() {
