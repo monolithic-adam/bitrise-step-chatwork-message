@@ -43,3 +43,20 @@ inputs:
          To get your **Room ID** look at the #!rid in your URL
       is_required: true
       is_sensitive: true
+  - build_status: $BITRISE_BUILD_STATUS
+    opts:
+      title: "Build Status"
+      is_required: true
+  - app_title: $BITRISE_APP_TITLE
+    opts:
+      title: "App Title"
+      is_required: true
+  - git_branch: $BITRISE_GIT_BRANCH
+    opts:
+      title: "Git Branch"
+  - git_message: $BITRISE_GIT_MESSAGE
+    opts:
+      title: "Git Message"
+  - build_url: $BITRISE_BUILD_URL
+    opts:
+      title: "Build URL"

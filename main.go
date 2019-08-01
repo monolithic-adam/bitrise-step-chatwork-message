@@ -15,8 +15,12 @@ import (
 // Config ...
 type Config struct {
 	// Message
-	APIToken stepconf.Secret `env:"api_token"`
-	RoomID   stepconf.Secret `env:"room_id"`
+	APIToken   stepconf.Secret `env:"api_token"`
+	RoomID     stepconf.Secret `env:"room_id"`
+	AppTitle   string          `env:"app_title"`
+	GitBranch  string          `env:"git_branch"`
+	GitMessage string          `env:"git_message"`
+	BuildURL   string          `env:"build_url"`
 }
 
 var success = os.Getenv("BITRISE_BUILD_STATUS") == "0"
@@ -32,7 +36,9 @@ func validate(conf *Config) error {
 // postMessage sends a message to a channel.
 func postMessage(conf Config, msg string) error {
 	client := &http.Client{}
-	apiURL := fmt.Sprintf("https://api.chatwork.com/v2/rooms/%s/messages?body=%s", string(conf.RoomID), msg)
+	testStr := url.QueryEscape(msg)
+	println(testStr)
+	apiURL := fmt.Sprintf("https://api.chatwork.com/v2/rooms/%s/messages?body=%s", string(conf.RoomID), url.QueryEscape(msg))
 	data := url.Values{}
 	req, err := http.NewRequest("POST", apiURL, strings.NewReader(data.Encode()))
 	if err != nil {
@@ -57,11 +63,11 @@ func postMessage(conf Config, msg string) error {
 	return nil
 }
 
-func createMessage() string {
+func createMessage(conf Config) string {
 	if !success {
-		return "%5Binfo%5D%5Btitle%5DNotification%20from%20Bitrise%5B%2Ftitle%5D(dance)%20Build%20Passed%20%E2%9C%85%20-%20%24%7BBITRISE_APP_TITLE%7D%20(%24%7BBITRISE_GIT_BRANCH%7D)%20%5C%5CnCommit%20message%3A%20%24%7BBITRISE_GIT_MESSAGE%7D%20%5C%5CnBuild%20logs%3A%20%24%7BBITRISE_BUILD_URL%7D%5B%2Finfo%5D"
+		return fmt.Sprintf("[info][title]Notification from Bitrise[/title];( Build Error 🚫 - %s (%s) \n Commit message: %s \n Build logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
 	}
-	return "%5Binfo%5D%5Btitle%5DNotification%20from%20Bitrise%5B%2Ftitle%5D%3B(%20Build%20Error%20%F0%9F%9A%AB%20-%20%24%7BBITRISE_APP_TITLE%7D%20(%24%7BBITRISE_GIT_BRANCH%7D)%20%5C%5CnCommit%20message%3A%20%24%7BBITRISE_GIT_MESSAGE%7D%20%5C%5CnBuild%20logs%3A%20%24%7BBITRISE_BUILD_URL%7D%5B%2Finfo%5D"
+	return fmt.Sprintf("[info][title]Notification from Bitrise[/title](dance) Build Passed ✅ - %s (%s) \n Commit message: %s \n Build logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
 }
 
 func main() {
@@ -78,7 +84,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := postMessage(conf, createMessage()); err != nil {
+	if err := postMessage(conf, createMessage(conf)); err != nil {
 		log.Errorf("Error: %s", err)
 		os.Exit(1)
 	}
