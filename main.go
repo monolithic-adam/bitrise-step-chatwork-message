@@ -15,12 +15,13 @@ import (
 // Config ...
 type Config struct {
 	// Message
-	APIToken   stepconf.Secret `env:"api_token"`
-	RoomID     stepconf.Secret `env:"room_id"`
-	AppTitle   string          `env:"app_title"`
-	GitBranch  string          `env:"git_branch"`
-	GitMessage string          `env:"git_message"`
-	BuildURL   string          `env:"build_url"`
+	APIToken       stepconf.Secret `env:"api_token"`
+	RoomID         stepconf.Secret `env:"room_id"`
+	AppTitle       string          `env:"app_title"`
+	GitBranch      string          `env:"git_branch"`
+	GitMessage     string          `env:"git_message"`
+	BuildURL       string          `env:"build_url"`
+	InstallPageURL string          `env:"install_page_url"`
 }
 
 var success = os.Getenv("BITRISE_BUILD_STATUS") == "0"
@@ -64,10 +65,18 @@ func postMessage(conf Config, msg string) error {
 }
 
 func createMessage(conf Config) string {
+	var messageString = "[info][title]Notification from Bitrise[/title]"
 	if !success {
-		return fmt.Sprintf("[info][title]Notification from Bitrise[/title];( Build Error 🚫 - %s (%s) \n Commit message: %s \n Build logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
+		messageString += fmt.Sprintf(";( Build Error 🚫 - %s (%s) \nCommit message: %s \nBuild logs: %s", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
+		return messageString
 	}
-	return fmt.Sprintf("[info][title]Notification from Bitrise[/title](dance) Build Passed ✅ - %s (%s) \n Commit message: %s \n Build logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
+
+	messageString += fmt.Sprintf("(dance) Build Passed ✅ - %s (%s) \nCommit message: %s \nBuild logs: %s", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
+	if conf.InstallPageURL != "" {
+		messageString += fmt.Sprintf(" \nInstall Page: %s", conf.InstallPageURL)
+	}
+	messageString += "[/info]"
+	return messageString
 }
 
 func main() {

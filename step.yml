@@ -8,7 +8,7 @@
 # - Bitrise CLI guides: http://devcenter.bitrise.io/bitrise-cli/
 
 title: |-
-  steps-chatwork-message
+  Send a Chatwork message
 summary: |
   Send a Chatwork message
 description: |
@@ -59,4 +59,7 @@ inputs:
       title: "Git Message"
   - build_url: $BITRISE_BUILD_URL
     opts:
-      title: "Build URL"
+      title: "Bitrise Build URL"
+  - install_page_url: $BITRISE_PUBLIC_INSTALL_PAGE_URL
+    opts:
+      title: "Install Page URL"
