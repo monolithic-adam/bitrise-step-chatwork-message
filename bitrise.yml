@@ -4,7 +4,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 app:
   envs:
   - BITRISE_STEP_ID: steps-chatwork-message
-  - BITRISE_STEP_VERSION: "0.0.2"
+  - BITRISE_STEP_VERSION: "0.0.3"
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/monolithic-adam/bitrise-step-steps-chatwork-message.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
 
@@ -21,6 +21,7 @@ workflows:
         title: On Success
         is_skippable: false
         inputs:
+        - build_status: "0"
         - api_token: $CHATWORK_API_TOKEN
         - room_id: $CHATWORK_ROOM_ID
         - git_message: On Success test
@@ -28,10 +29,20 @@ workflows:
         title: On Success With Install Page URL
         is_skippable: false
         inputs:
+        - build_status: "0"
         - api_token: $CHATWORK_API_TOKEN
         - room_id: $CHATWORK_ROOM_ID
-        - git_message: On Success test
+        - git_message: On Success with install page test
         - install_page_url: $INSTALL_PAGE_URL
+    - path::./:
+        title: On Failure
+        is_skippable: false
+        inputs:
+        - build_status: "1"
+        - api_token: $CHATWORK_API_TOKEN
+        - room_id: $CHATWORK_ROOM_ID
+        - git_message: On Failure test
+
 
 
   # ----------------------------------------------------------------

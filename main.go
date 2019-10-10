@@ -22,9 +22,10 @@ type Config struct {
 	GitMessage     string          `env:"git_message"`
 	BuildURL       string          `env:"build_url"`
 	InstallPageURL string          `env:"install_page_url"`
+	BuildStatus    string          `env:"build_status"`
 }
 
-var success = os.Getenv("BITRISE_BUILD_STATUS") == "0"
+var success = false
 
 func validate(conf *Config) error {
 	if conf.APIToken == "" && conf.RoomID == "" {
@@ -67,7 +68,7 @@ func postMessage(conf Config, msg string) error {
 func createMessage(conf Config) string {
 	var messageString = "[info][title]Notification from Bitrise[/title]"
 	if !success {
-		messageString += fmt.Sprintf(";( Build Error 🚫 - %s (%s) \nCommit message: %s \nBuild logs: %s", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
+		messageString += fmt.Sprintf(";( Build Error 🚫 - %s (%s) \nCommit message: %s \nBuild logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
 		return messageString
 	}
 
@@ -88,6 +89,7 @@ func main() {
 	}
 	stepconf.Print(conf)
 
+	success = conf.BuildStatus == "0"
 	if err := validate(&conf); err != nil {
 		log.Errorf("Error: %s\n", err)
 		os.Exit(1)
