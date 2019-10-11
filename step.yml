@@ -29,7 +29,7 @@ inputs:
     opts:
       title: "Chatwork API Token"
       description: |
-         **An api\_token input is required.**
+         **An api_token input is required.**
          
          To get your **API token** visit: https://www.chatwork.com/service/packages/chatwork/subpackages/api/token.php
       is_required: true
@@ -38,9 +38,10 @@ inputs:
     opts:
       title: "Chatwork Room ID"
       description: |
-         **An room\_id input is required.**
+         **An room_id input is required.**
          
-         To get your **Room ID** look at the #!rid in your URL
+         To get your **Room ID** look at the #!rid in your URL or in the group chat setting screen.
+         For more information visit: https://help.chatwork.com/hc/ja/articles/360000142942-%E3%83%AB%E3%83%BC%E3%83%A0ID%E3%82%92%E7%A2%BA%E8%AA%8D%E3%81%99%E3%82%8B
       is_required: true
       is_sensitive: true
   - build_status: $BITRISE_BUILD_STATUS
