@@ -42,6 +42,14 @@ workflows:
         - api_token: $CHATWORK_API_TOKEN
         - room_id: $CHATWORK_ROOM_ID
         - git_message: On Failure test
+    - path::./:
+        title: With Message Override
+        is_skippable: false
+        inputs:
+        - build_status: "0"
+        - api_token: $CHATWORK_API_TOKEN
+        - room_id: $CHATWORK_ROOM_ID
+        - chatwork_message: Message is overridden
 
 
 

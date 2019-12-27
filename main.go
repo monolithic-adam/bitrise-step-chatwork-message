@@ -15,14 +15,15 @@ import (
 // Config ...
 type Config struct {
 	// Message
-	APIToken       stepconf.Secret `env:"api_token"`
-	RoomID         stepconf.Secret `env:"room_id"`
-	AppTitle       string          `env:"app_title"`
-	GitBranch      string          `env:"git_branch"`
-	GitMessage     string          `env:"git_message"`
-	BuildURL       string          `env:"build_url"`
-	InstallPageURL string          `env:"install_page_url"`
-	BuildStatus    string          `env:"build_status"`
+	APIToken        stepconf.Secret `env:"api_token"`
+	RoomID          stepconf.Secret `env:"room_id"`
+	AppTitle        string          `env:"app_title"`
+	GitBranch       string          `env:"git_branch"`
+	GitMessage      string          `env:"git_message"`
+	BuildURL        string          `env:"build_url"`
+	InstallPageURL  string          `env:"install_page_url"`
+	BuildStatus     string          `env:"build_status"`
+	ChatworkMessage string          `env:"chatwork_message"`
 }
 
 var success = false
@@ -66,6 +67,9 @@ func postMessage(conf Config, msg string) error {
 }
 
 func createMessage(conf Config) string {
+	if conf.ChatworkMessage != "" {
+		return conf.ChatworkMessage
+	}
 	var messageString = "[info][title]Notification from Bitrise[/title]"
 	if !success {
 		messageString += fmt.Sprintf(";( Build Error 🚫 - %s (%s) \nCommit message: %s \nBuild logs: %s[/info]", conf.AppTitle, conf.GitBranch, conf.GitMessage, conf.BuildURL)
