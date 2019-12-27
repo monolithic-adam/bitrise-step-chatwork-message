@@ -4,7 +4,7 @@ default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
 app:
   envs:
   - BITRISE_STEP_ID: steps-chatwork-message
-  - BITRISE_STEP_VERSION: "0.0.3"
+  - BITRISE_STEP_VERSION: "0.0.4"
   - BITRISE_STEP_GIT_CLONE_URL: https://github.com/monolithic-adam/bitrise-step-steps-chatwork-message.git
   - MY_STEPLIB_REPO_FORK_GIT_URL: $MY_STEPLIB_REPO_FORK_GIT_URL
 
